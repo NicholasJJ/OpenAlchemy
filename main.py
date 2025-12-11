@@ -55,15 +55,20 @@ def updateDiscoveredMaterialsList(ui_list):
 def addToCanvas(material):
     """Add a material widget to the canvas"""
     # Create a draggable card on the canvas
+    # Random position within canvas bounds (800x500, with 100px card width/height and some margin)
+    import random
+    random_x = random.randint(50, 700)
+    random_y = random.randint(50, 400)
+    
     with canvas_container:
         card = ui.card().classes('absolute cursor-move bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow')
-        card.style('left: 100px; top: 100px; width: 100px; text-align: center;')
+        card.style(f'left: {random_x}px; top: {random_y}px; width: 100px; text-align: center;')
         
         widget_data = {
             'material': material,
             'card': card,
-            'x': 100,
-            'y': 100,
+            'x': random_x,
+            'y': random_y,
             'dragging': False,
             'offset_x': 0,
             'offset_y': 0
@@ -105,6 +110,27 @@ async def on_mouse_move(e: MouseEventArguments):
             # Calculate new position (mouse position minus the offset to keep widget under cursor)
             new_x = canvas_mouse_x - widget['offset_x']
             new_y = canvas_mouse_y - widget['offset_y']
+            
+            # Check for potential collision with other widgets
+            collision_detected = False
+            for other in canvas_widgets:
+                if other is not widget:
+                    dx = new_x - other['x']
+                    dy = new_y - other['y']
+                    distance = (dx * dx + dy * dy) ** 0.5
+                    
+                    if distance < 80:  # Collision threshold
+                        collision_detected = True
+                        # Add wiggle animation to both widgets
+                        other['card'].classes(remove='wiggle')
+                        other['card'].classes(add='wiggle')
+                        break
+            
+            # Remove wiggle from all non-colliding widgets
+            if not collision_detected:
+                for other in canvas_widgets:
+                    if other is not widget:
+                        other['card'].classes(remove='wiggle')
             
             # Update position (keep pointer-events: none during drag)
             widget['x'] = new_x
@@ -193,6 +219,27 @@ async def combine_materials(widget1, widget2):
 # Initialize and build UI
 initDiscoveredMaterials()
 ui.query('body').style('font-family: monospace;')
+
+# Add wiggle animation CSS and prevent text selection
+ui.add_head_html('''
+<style>
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg) scale(1.05); }
+    75% { transform: rotate(3deg) scale(1.05); }
+}
+.wiggle {
+    animation: wiggle 0.3s ease-in-out infinite;
+}
+/* Prevent text selection on cards */
+.q-card {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>
+''')
 
 ui.header().classes('bg-transparent')
 with ui.column().classes('w-full items-center'):
