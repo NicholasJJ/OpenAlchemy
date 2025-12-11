@@ -1,39 +1,10 @@
 # Open Alchemy 🧪
-This is an open-source project inspired by the game _Infinite Craft_.\
+This is a fork of an open-source project inspired by the game _Infinite Craft_.\
 It is programmed in Python and uses the [NiceGUI](https://nicegui.io/) Python Library for the UI.
    * It uses Google's Gemini instead of Llama 2 like _Infinite Craft_
 
 ## Getting Started
-In order to play, you need a Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/).\
-Once you have an API key, you can either set it as an enviroment variable on your local machine, or you can go into the `recipe.py` file and add your api key where it says `client = genai.Client()`
-  * Ex: `client = genai.Client(api_key= 'GEMINI_API_KEY')`
+In order to play, you need to set up ollama, and change the call in recipe.py to match whatever model version in ollama you want
 <br />
 Now you can run and play!
 
-## Game Customization
-Right now, the system prompt (found in the `recipe.py` file) is as follows:
-```
-'''Create a new material based on two given materials output your answer like:    
-                {
-                    "material_list" : ["FIRE", "EARTH"],
-                    "output" : {
-                        "name" : "VOLCANO,
-                        "emoji" "🌋"
-                    }
-                },
-                
-                but make sure it has no extra words, only the curly braces and the contents, DO NOT WRITE IT LIKE:
-                ```json
-                {
-                    "material_list" : ["FIRE", "EARTH"],
-                    "output" : {
-                        "name" : "VOLCANO,
-                        "emoji" : "🌋"
-                    }
-                }
-                ```, make sure that the materials created are common items, things, people, foods, places, buildings'''
-```
-You can edit this if you like!
-
-## Showcase
-[![SHOWCASE_VIDEO](https://img.youtube.com/vi/1nIRfCMAF9U/0.jpg)](https://www.youtube.com/watch?v=1nIRfCMAF9U)
