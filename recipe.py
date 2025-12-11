@@ -1,5 +1,4 @@
-from google import genai
-from google.genai.types import GenerateContentConfig
+import ollama
 import json
 import os
 
@@ -13,11 +12,12 @@ class Recipe:
 
 
 def createRecipe(material_one, material_two):
-    client = genai.Client()
-    response = client.models.generate_content(
-        model= "gemini-2.5-flash",
-        config= GenerateContentConfig(
-            system_instruction= '''Create a new material based on two given materials output your answer like:    
+    response = ollama.chat(
+        model='llama3.2:latest',
+        messages=[
+            {
+                'role': 'system',
+                'content': '''Create a new material based on two given materials output your answer like:    
                 {
                     "material_list" : ["FIRE", "EARTH"],
                     "output" : {
@@ -37,12 +37,16 @@ def createRecipe(material_one, material_two):
                 }
                 ```,
                 make sure that the materials created are common items, things, people, foods, places, buildings'''
-        ),
-        contents= f"material one is {material_one} and material two is {material_two}"
+            },
+            {
+                'role': 'user',
+                'content': f"material one is {material_one} and material two is {material_two}"
+            }
+        ]
     )
 
-    # print(response.text)
-    material_json = json.loads(response.text)
+    # print(response['message']['content'])
+    material_json = json.loads(response['message']['content'])
 
     script_dir = os.path.dirname(__file__)
     filename = "recipes.json"
