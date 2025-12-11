@@ -1,22 +1,12 @@
 [
     {
         "material_list": [
-            "FIRE",
-            "WATER"
+            "WATER",
+            "FIRE"
         ],
         "output": {
-            "name": "steam",
-            "emoji": ""
-        }
-    },
-    {
-        "material_list": [
-            "STEAM",
-            "DNA"
-        ],
-        "output": {
-            "name": "BIOREACTOR",
-            "emoji": "\ud83e\uddec"
+            "name": "HYDROGEN",
+            "emoji": "H2"
         }
     }
 ]
