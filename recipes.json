@@ -8,5 +8,15 @@
             "name": "HYDROGEN",
             "emoji": "H2"
         }
+    },
+    {
+        "material_list": [
+            "HYDROGEN",
+            "WATER"
+        ],
+        "output": {
+            "name": "Hydrogenated Water",
+            "emoji": "\ud83d\udca7"
+        }
     }
 ]
